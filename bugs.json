@@ -1,0 +1,18 @@
+{
+    "bugs": [
+        {
+            "summary": "Sign-in button is not working",
+            "steps": "1. Open the login page\n2. Enter valid credentials\n3. Click the 'Sign In' button",
+            "actual_result": "The button does not respond when clicked.",
+            "expected_result": "User should be logged in and redirected to the dashboard.",
+            "environment": "Windows 10, Chrome 110"
+        },
+        {
+            "summary": "Password reset link is broken",
+            "steps": "1. Go to the login page\n2. Click on 'Forgot Password'\n3. Enter an email and submit",
+            "actual_result": "Nothing happens when clicking the reset button.",
+            "expected_result": "User should receive a password reset email.",
+            "environment": "MacOS Monterey, Safari 15"
+        }
+    ]
+}
