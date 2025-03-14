@@ -3,6 +3,7 @@ import json
 import sys
 import os
 from dotenv import load_dotenv
+from requests.auth import HTTPBasicAuth
 
 # Load environment variables from .env file
 load_dotenv()
@@ -13,8 +14,8 @@ EMAIL = os.getenv("JIRA_EMAIL")
 API_TOKEN = os.getenv("JIRA_API_TOKEN")
 PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")
 
-HEADERS = {"Content-Type": "application/json"}
-AUTH = (EMAIL, API_TOKEN)
+HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
+AUTH = HTTPBasicAuth(EMAIL, API_TOKEN)
 
 # Function to Create a Bug in Jira
 def create_bug(summary, steps, actual_result, expected_result, environment):
@@ -39,10 +40,13 @@ def create_bug(summary, steps, actual_result, expected_result, environment):
     response = requests.post(JIRA_URL, headers=HEADERS, auth=AUTH, json=issue_data)
 
     if response.status_code == 201:
+        response_data = response.json()
+        issue_key = response_data.get("key", "UNKNOWN")  # Get the actual Jira issue key
         print(f"✅ Bug Created: {summary}")
-        print(f"🔗 JIRA Link: {response.json()['self']}")
+        print(f"🔗 JIRA Link: https://anaconda.atlassian.net/browse/{issue_key}")
     else:
-        print(f"❌ Failed to create bug: {response.text}")
+        print(f"❌ Failed to create bug: {response.status_code}")
+        print(response.text)
 
 # Function to Create Multiple Bugs from a JSON File
 def create_multiple_bugs(bugs_list):
