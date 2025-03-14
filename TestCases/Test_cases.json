@@ -1,0 +1,42 @@
+{
+    "test_cases": [
+      {
+        "summary": "Verify UI of Privacy & Security Page",
+        "preconditions": [
+          "User must be logged into Nucleus.",
+          "User must navigate to Privacy & Security Page."
+        ],
+        "test_steps": [
+          {
+            "step": "Verify the page title and header text.",
+            "data": "N/A",
+            "Test Result": "The page title should be 'Privacy & Security' and the header should match it."
+          },
+          {
+            "step": "Check if all sections are visible.",
+            "data": "N/A",
+            "Test Result": "All sections should be correctly displayed."
+          }
+        ]
+      },
+      {
+        "summary": "Verify Login Functionality",
+        "preconditions": [
+          "User must have valid credentials.",
+          "User must be on the login page."
+        ],
+        "test_steps": [
+          {
+            "step": "Enter valid email and password.",
+            "data": "user@example.com / password123",
+            "Test Result": "User should be logged in successfully."
+          },
+          {
+            "step": "Enter invalid password.",
+            "data": "user@example.com / wrongpassword",
+            "Test Result": "An error message should be displayed."
+          }
+        ]
+      }
+    ]
+  }  
