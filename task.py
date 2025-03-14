@@ -1,11 +1,19 @@
 import requests
 import json
+import os
+from dotenv import load_dotenv
 
-# JIRA Configuration
-JIRA_URL = "https://anaconda.atlassian.net/rest/api/3/issue"
-EMAIL = "umanan@anaconda.com"
-API_TOKEN = "your_api_token"
-PROJECT_KEY = "HUB"
+# Load environment variables from .env file
+load_dotenv()
+
+# Read Jira credentials from environment variables
+JIRA_URL = f"{os.getenv('JIRA_URL')}/rest/api/3/issue"
+EMAIL = os.getenv("JIRA_EMAIL")
+API_TOKEN = os.getenv("JIRA_API_TOKEN")
+PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")
+
+HEADERS = {"Content-Type": "application/json"}
+AUTH = (EMAIL, API_TOKEN)
 
 # Function to create a test case in JIRA
 def create_test_case(summary, description):
@@ -32,8 +40,7 @@ def create_test_case(summary, description):
         }
     }
 
-    headers = {"Content-Type": "application/json"}
-    response = requests.post(JIRA_URL, headers=headers, auth=(EMAIL, API_TOKEN), data=json.dumps(issue_data))
+    response = requests.post(JIRA_URL, headers=HEADERS, auth=AUTH, json=issue_data)
 
     if response.status_code == 201:
         print(f"✅ Test Case Created: {summary}")
