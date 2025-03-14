@@ -1,15 +1,17 @@
 import requests
 import json
 import sys
+import os
+from dotenv import load_dotenv
 
-# Load Jira credentials from config file
-with open("config.json", "r") as config_file:
-    config = json.load(config_file)
+# Load environment variables from .env file
+load_dotenv()
 
-JIRA_URL = f"{config['jira_url']}/rest/api/3/issue"
-EMAIL = config["email"]
-API_TOKEN = config["api_token"]
-PROJECT_KEY = config["project_key"]
+# Read credentials from environment variables
+JIRA_URL = f"{os.getenv('JIRA_URL')}/rest/api/3/issue"
+EMAIL = os.getenv("JIRA_EMAIL")
+API_TOKEN = os.getenv("JIRA_API_TOKEN")
+PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")
 
 HEADERS = {"Content-Type": "application/json"}
 AUTH = (EMAIL, API_TOKEN)
@@ -42,7 +44,7 @@ def create_bug(summary, steps, actual_result, expected_result, environment):
     else:
         print(f"❌ Failed to create bug: {response.text}")
 
-# Function to Create Multiple Bugs from a List
+# Function to Create Multiple Bugs from a JSON File
 def create_multiple_bugs(bugs_list):
     for bug in bugs_list:
         create_bug(
