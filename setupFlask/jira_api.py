@@ -23,16 +23,29 @@ HEADERS = {
 
 @app.route('/create_issue', methods=['POST'])
 def create_issue():
-    """Creates a JIRA issue from GPT request"""
+    """Creates a JIRA issue from GPT request and logs request details for debugging"""
 
-    # Receive request from GPT
+    # 🔹 Debugging: Print received headers & body
+    print("\n🔹 Headers received:", request.headers)
+    print("🔹 Data received:", request.json)
+
+    # Extract data from request
     data = request.json
     summary = data.get("summary")
     description = data.get("description")
+    issuetype = data.get("issuetype")  # Expecting either "Bug" or "Test"
 
     # Ensure required fields exist
-    if not summary or not description:
-        return jsonify({"error": "Missing required fields (summary, description)"}), 400
+    if not summary or not description or not issuetype:
+        return jsonify({"error": "Missing required fields (summary, description, issuetype)"}), 400
+
+    # Validate issuetype (must be either "Bug" or "Test")
+    valid_issue_types = ["Bug", "Test"]
+    if issuetype not in valid_issue_types:
+        return jsonify({"error": "Invalid issue type. Use 'Bug' or 'Test'."}), 400
+
+    # ✅ Debug log
+    print(f"📝 Creating JIRA Issue - Type: {issuetype}")
 
     # Create JIRA Issue Payload
     issue_data = {
@@ -40,24 +53,31 @@ def create_issue():
             "project": {"key": PROJECT_KEY},
             "summary": summary,
             "description": description,
-            "issuetype": {"name": "Bug"},
+            "issuetype": {"name": issuetype},  # ✅ Dynamically setting issuetype
         }
     }
 
     # Send Request to JIRA
-    response = requests.post(
-        f"{JIRA_URL}/rest/api/2/issue",
-        headers=HEADERS,
-        auth=HTTPBasicAuth(EMAIL, API_TOKEN),
-        json=issue_data
-    )
+    try:
+        response = requests.post(
+            f"{JIRA_URL}/rest/api/2/issue",
+            headers=HEADERS,
+            auth=HTTPBasicAuth(EMAIL, API_TOKEN),
+            json=issue_data
+        )
 
-    # Handle JIRA Response
-    if response.status_code == 201:
-        jira_response = response.json()
-        return jsonify({"message": "Issue Created", "key": jira_response["key"]}), 201
-    else:
-        return jsonify({"error": "Failed to create issue", "details": response.text}), response.status_code
+        # Handle JIRA Response
+        if response.status_code == 201:
+            jira_response = response.json()
+            print(f"✅ JIRA Issue Created: {jira_response['key']}")
+            return jsonify({"message": "Issue Created", "key": jira_response["key"]}), 201
+        else:
+            print("❌ JIRA API Error:", response.text)
+            return jsonify({"error": "Failed to create issue", "details": response.text}), response.status_code
+
+    except requests.exceptions.RequestException as e:
+        print("🚨 JIRA Connection Error:", str(e))
+        return jsonify({"error": "JIRA connection failed", "details": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
