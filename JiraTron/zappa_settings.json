@@ -1,0 +1,16 @@
+{
+    "dev": {
+      "app_function": "jira_api.app",
+      "aws_region": "us-east-1",
+      "profile_name": "default",
+      "project_name": "jiratron",
+      "runtime": "python3.12",
+      "s3_bucket": "zappa-0ky6zfj0b",
+      "environment_variables": {
+        "JIRA_URL": "https://usamamanan.atlassian.net",
+        "JIRA_EMAIL": "usamamanan23@gmail.com",
+        "JIRA_API_TOKEN": "ATATT3xFfGF0KbzleEw7Me0HpsSDyLH0rAK8y0fNa7CUBDi_EjG-41rLaUfFZQTf10yvBRy_Zf1wEabYwqPiZmFSnJ8cKz_127O8SIdlTzv5VZbwPNfhamSvZA83G-mQ6d4J3eXFd5jITK9KOl1lEeEJv0-RcgcZbQAqdLZ1oSP839-cU6Rf6vk=925278AD",
+        "JIRA_PROJECT_KEY": "TESTPRO"
+      }
+    }
+  }  
