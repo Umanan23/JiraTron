@@ -11,7 +11,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # JIRA Configuration (Load from .env)
-JIRA_URL = os.getenv("JIRA_URL")           # e.g., https://usamamanan.atlassian.net
+JIRA_URL = os.getenv("JIRA_URL")           # e.g., you main jira url
 EMAIL = os.getenv("JIRA_EMAIL")            # Your Atlassian email
 API_TOKEN = os.getenv("JIRA_API_TOKEN")    # Your JIRA API Token
 DEFAULT_PROJECT_KEY = os.getenv("JIRA_PROJECT_KEY")  # Default Jira Project Key
